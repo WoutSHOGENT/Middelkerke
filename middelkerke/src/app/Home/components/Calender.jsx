@@ -8,6 +8,7 @@ export default function Calender(){
         "November", "December"];
     const weekdays = [ "Ma", "Di", "Wo", "Do", "Vr", "Za", "Zo"];
     const date = new Date();
+    var datum;
     const month = date.getMonth();
     const year = date.getFullYear();
     const lastDateOfMonth = new Date(year, month + 1, 0).getDate();
@@ -16,20 +17,22 @@ export default function Calender(){
     const firstDayOfNextMonth = new Date(year, month + 1).getDay();
     const dayList = [];
 
-        console.log("Last date of month: ", firstDayOfMonth);
 
     for (let i = firstDayOfMonth; i<6; i++){
-        dayList.push(lastDateOfLastMonth - i);
+        dayList.push(new Date(year, month - 1, lastDateOfLastMonth - i));
+        // dayList.push(lastDateOfLastMonth - i); 
     }
 
     dayList.reverse();
 
     for (let i = 1; i <= lastDateOfMonth; i++) {
-        dayList.push(i);
+        dayList.push(new Date(year, month, i));
+        // dayList.push(i);
     }
 
     for(let i = firstDayOfNextMonth; i <= 7; i++){
-        dayList.push(i- firstDayOfNextMonth + 1);
+        dayList.push(new Date(year, month + 1, i - firstDayOfNextMonth + 1));
+        // dayList.push(i- firstDayOfNextMonth + 1);
     }
 
     return(
@@ -46,7 +49,7 @@ export default function Calender(){
                     })
                     }
                 </ul>
-                <Days listOfDays={dayList} />
+                <Days listOfDays={[...dayList]} today={date} />
             </div>
         </div>
     )
