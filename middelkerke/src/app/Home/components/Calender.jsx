@@ -13,29 +13,41 @@ export default function Calender(){
     const [year, setYear] = useState(date.getFullYear());
     // const month = date.getMonth();
     const lastDateOfMonth = new Date(year, month + 1, 0).getDate();
-    const firstDayOfMonth = new Date(year, month, 1).getDay();
+    var firstDayOfMonth = new Date(year, month, 1).getDay();
     const lastDateOfLastMonth = new Date(year, month, 0).getDate();
-    const firstDayOfNextMonth = new Date(year, month + 1).getDay();
+    var firstDayOfNextMonth = new Date(year, month + 1).getDay();
     const dayList = [];
 
-
-
-    for (let i = firstDayOfMonth; i<6; i++){
-        dayList.push(new Date(year, month - 1, lastDateOfLastMonth - i)); //foutje zit hier, te veel dagen van de maand ervoor
-
+    if(firstDayOfMonth == 0){
+        firstDayOfMonth = 7;
     }
 
+    if(firstDayOfNextMonth == 0){
+        firstDayOfNextMonth = 7;
+    }
+
+    for (let i = 0; i < firstDayOfMonth - 1; i++) {
+        dayList.push({
+            date: new Date(year, month - 1, lastDateOfLastMonth - i),
+            isCurrentMonth: false
+        });
+    }
     dayList.reverse();
 
     for (let i = 1; i <= lastDateOfMonth; i++) {
-        dayList.push(new Date(year, month, i));
+        dayList.push({
+            date: new Date(year, month, i),
+            isCurrentMonth: true
+        });
     }
 
-    if(firstDayOfNextMonth != 1) {
-        console.log(firstDayOfNextMonth)
-        for(let i = firstDayOfNextMonth; i <= 6; i++){
-        dayList.push(new Date(year, month + 1, i - firstDayOfNextMonth + 1));
-    }
+    if (firstDayOfNextMonth != 1) {
+        for (let i = firstDayOfNextMonth; i <= 7; i++) {
+            dayList.push({
+                date: new Date(year, month + 1, i - firstDayOfNextMonth + 1),
+                isCurrentMonth: false
+            });
+        }
     }
     
 
