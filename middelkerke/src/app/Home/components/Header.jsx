@@ -1,13 +1,19 @@
-export default function Header({month, year}){
+export default function Header({month, monthString, year, setMonth, setYear}){
 
-    
+    const handleClick = (direction) => {
+        if(direction === 'L'){
+           month == 0 ? (setMonth(11), setYear(year - 1)) : setMonth(month - 1); 
+        }else{
+            month == 11 ? (setMonth(0), setYear(year + 1)) : setMonth(month + 1); 
+        }
+    }
 
     return(
         <span className="flex space-between justify-between w-50 mb-4">
-            <h1>{month} {year}</h1>
+            <h1>{monthString} {year}</h1>
             <div>
-                <span className="hover:cursor-pointer"> L </span>
-                <span className="hover:cursor-pointer"> R </span>
+                <button onClick={() => handleClick("L")} className="mr-5 pl-1 pr-1 border  hover:cursor-pointer"> L </button>
+                <button onClick={() => handleClick("R")} className="border pl-1 pr-1 hover:cursor-pointer"> R </button>
             </div>
         </span>
     )
