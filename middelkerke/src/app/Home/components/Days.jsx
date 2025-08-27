@@ -11,7 +11,7 @@ export default function Days({ listOfDays = [], today }) {
                 return (
                     <li
                         key={index}
-                        className={`aspect-square flex-1 min-w-[14%] max-w-[14%] border border-red-600 flex items-center justify-center ${
+                        className={`aspect-square flex-1 min-w-1/7 max-w-1/7 border border-red-600 flex items-center justify-center ${
                             isToday ? "bg-red-500" : ""
                         } ${!isCurrentMonth ? "text-gray-400" : ""}`}
                         style={{ boxSizing: "border-box" }}
