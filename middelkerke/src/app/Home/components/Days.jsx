@@ -1,6 +1,6 @@
 export default function Days({ listOfDays = [], today }) {
     return (
-        <ul className="flex justify-between text-center text-sm flex-wrap">
+        <ul className="flex flex-wrap text-center text-sm">
             {listOfDays.map((dayObj, index) => {
                 const { date, isCurrentMonth } = dayObj;
                 const isToday =
@@ -11,9 +11,10 @@ export default function Days({ listOfDays = [], today }) {
                 return (
                     <li
                         key={index}
-                        className={`w-1/7 flex justify-center mb-4 ${
+                        className={`aspect-square flex-1 min-w-[14%] max-w-[14%] border border-red-600 flex items-center justify-center ${
                             isToday ? "bg-red-500" : ""
                         } ${!isCurrentMonth ? "text-gray-400" : ""}`}
+                        style={{ boxSizing: "border-box" }}
                     >
                         {date.getDate()}
                     </li>
