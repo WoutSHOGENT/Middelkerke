@@ -1,6 +1,6 @@
 export default function Days({ listOfDays = [], today }) {
     return (
-        <ul className="flex flex-wrap text-center text-sm">
+        <ul className="grid grid-cols-7">
             {listOfDays.map((dayObj, index) => {
                 const { date, isCurrentMonth } = dayObj;
                 const isToday =
@@ -11,10 +11,9 @@ export default function Days({ listOfDays = [], today }) {
                 return (
                     <li
                         key={index}
-                        className={`aspect-square flex-1 min-w-1/7 max-w-1/7 border border-red-600 flex items-center justify-center ${
+                        className={`flex items-center justify-center aspect-square size-20 border border-red-500 ${
                             isToday ? "bg-red-500" : ""
                         } ${!isCurrentMonth ? "text-gray-400" : ""}`}
-                        style={{ boxSizing: "border-box" }}
                     >
                         {date.getDate()}
                     </li>

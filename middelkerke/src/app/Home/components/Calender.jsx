@@ -47,10 +47,10 @@ export default function Calender(){
         <div className="flex flex-col items-center justify-center w-2/5 h-auto p-4 border-2 border-white">
             <Header month={month} monthString={months[month]} year={year} setMonth={setMonth} setYear={setYear}/>
             <div>
-                <ul className="flex justify-between text-center w-full text-sm font-semibold mb-4">
+                <ul className="grid grid-cols-7 text-center text-sm font-semibold mb-4">
                     {weekdays.map((day, index) => {
                         return(
-                            <li key={index} className="w-1/7">
+                            <li key={index} className="text-center">
                                 {day}
                             </li>
                         )
