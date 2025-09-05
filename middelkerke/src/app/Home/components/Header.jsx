@@ -9,7 +9,7 @@ export default function Header({month, monthString, year, setMonth, setYear}){
     }
 
     return(
-        <span className="flex space-between justify-between w-50 mb-4">
+        <span className="flex space-between justify-between w-50 mb-4 text-black">
             <h1>{monthString} {year}</h1>
             <div>
                 <button onClick={() => handleClick("L")} className="mr-5 pl-1 pr-1 border  hover:cursor-pointer"> L </button>
