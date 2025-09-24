@@ -1,6 +1,6 @@
 import express from "express";
-import userRoutes from "./routes/user";
-import reservationRoutes from "./routes/reservation";
+import userRoutes from "./service/user";
+import reservationRoutes from "./service/reservation";
 
 const app = express();
 const port = process.env.PORT || 3001;

@@ -9,7 +9,6 @@ export default function Calender(){
         "Juni", "Juli", "Augustus", "September", "Oktober",
         "November", "December"];
     const weekdays = [ "Ma", "Di", "Wo", "Do", "Vr", "Za", "Zo"];
-
     const date = new Date();
     const [month, setMonth] = useState(date.getMonth());
     const [year, setYear] = useState(date.getFullYear());
@@ -45,7 +44,6 @@ export default function Calender(){
         }
     }
 
-    // Handler to select/deselect days
     const handleDayClick = (date) => {
         const dateString = date.toLocaleDateString();
         setSelectedDays(prev =>
@@ -55,16 +53,13 @@ export default function Calender(){
         );
     };
 
-    // Handler for reservation button
     const handleReserve = () => {
-        // Find dates that are already reserved
         const alreadyReserved = selectedDays.filter(day => reservedDays.includes(day));
         if (alreadyReserved.length > 0) {
             alert("These days have already been reserved: " + alreadyReserved.join(", "));
             setSelectedDays([]);
             return;
         }
-        // Add selected days to reservedDays
         setReservedDays(prev => [...prev, ...selectedDays]);
         alert("Reserved days: " + selectedDays.join(", "));
         setSelectedDays([]);

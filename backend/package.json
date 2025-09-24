@@ -9,9 +9,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "tsx index.ts",
+    "start": "tsx src/index.ts",
     "start:dev": "tsx watch --env-file .env --inspect=0.0.0.0:9001 src/index.ts",
-    "build": "tsc"
+    "build": "tsc",
+    "prisma:generate": "npx prisma generate"
   },
   "dependencies": {
     "@prisma/client": "^6.15.0",

@@ -1,20 +1,15 @@
-import { Router } from "express";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
-const router = Router();
 
-router.get("/", async (_req, res) => {
+export async function getAllReservations() {
     const reservations = await prisma.reservation.findMany({ include: { user: true } });
-    res.json(reservations);
-});
+    return reservations;
+}
 
-router.post("/", async (req, res) => {
-    const { date, userId } = req.body;
+export async function createReservation(date: string, userId:number){
     const reservation = await prisma.reservation.create({
         data: { date: new Date(date), userId }
     });
-    res.status(201).json(reservation);
-});
-
-export default router;
+    return reservation;
+}
