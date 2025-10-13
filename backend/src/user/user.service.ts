@@ -1,20 +1,33 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { users, User } from '../data/mockdata';
 import {
 	CreateUsersRequestDto,
 	UpdateUserRequestDto,
 	UserListResponseDto,
 	UserResponseDto,
 } from './user.dto';
+import {
+	InjectDrizzle,
+	type DatabaseProvider,
+} from '../drizzle/drizzle.provider';
+import { eq } from 'drizzle-orm';
+import { users } from '../drizzle/schema';
 
 @Injectable()
 export class UserService {
-	getAll(): UserListResponseDto {
-		return { items: users };
+	constructor(
+		@InjectDrizzle()
+		private readonly db: DatabaseProvider,
+	) {}
+
+	async getAll(): Promise<UserListResponseDto> {
+		const items = await this.db.query.users.findMany();
+		return { items };
 	}
 
-	getById(id: number): UserResponseDto {
-		const user = users.find((item: User) => item.id === id);
+	async getById(id: number): Promise<UserResponseDto> {
+		const user = await this.db.query.users.findFirst({
+			where: eq(users.id, id),
+		});
 
 		if (!user) {
 			throw new NotFoundException('No User with this Id');
@@ -23,25 +36,32 @@ export class UserService {
 		return user;
 	}
 
-	create({ name, email, password }: CreateUsersRequestDto): UserResponseDto {
+	async create({
+		name,
+		email,
+		password,
+	}: CreateUsersRequestDto): Promise<UserResponseDto> {
 		const newUser = {
-			id: Math.max(...users.map((item: User) => item.id)) + 1,
 			name,
 			email,
 			password,
 		};
-		users.push(newUser);
-		return newUser;
+		const [user] = await this.db.insert(users).values(newUser).$returningId();
+		return this.getById(user.id);
 	}
 
-	update(
+	async update(
 		id: number,
 		{ name, email, password }: UpdateUserRequestDto,
-	): UserResponseDto {
-		let existingUser = this.getById(id);
-		if (existingUser) {
-			existingUser = { id: id, name, email, password };
-		}
+	): Promise<UserResponseDto> {
+		const changes: Partial<typeof users.$inferInsert> = {};
+
+		if (name !== undefined) changes.name = name;
+		if (email !== undefined) changes.email = email;
+		if (password !== undefined) changes.password = password;
+
+		const existingUser = this.getById(id);
+		await this.db.update(users).set(changes).where(eq(users.id, id));
 		return existingUser;
 	}
 }

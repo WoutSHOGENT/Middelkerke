@@ -29,19 +29,21 @@ export class UserController {
 
 	@Get()
 	@HttpCode(HttpStatus.OK)
-	getAllUsers(): UserListResponseDto {
+	async getAllUsers(): Promise<UserListResponseDto> {
 		return this.userService.getAll();
 	}
 
 	@Get(':id')
 	@HttpCode(HttpStatus.OK)
-	getUserById(@Param('id') id: string): UserResponseDto {
+	getUserById(@Param('id') id: string): Promise<UserResponseDto> {
 		return this.userService.getById(Number(id));
 	}
 
 	@Post()
 	@HttpCode(HttpStatus.CREATED)
-	createUser(@Body() createUserDto: CreateUsersRequestDto): UserResponseDto {
+	createUser(
+		@Body() createUserDto: CreateUsersRequestDto,
+	): Promise<UserResponseDto> {
 		return this.userService.create(createUserDto);
 	}
 
@@ -50,7 +52,7 @@ export class UserController {
 	updateUser(
 		@Param('id') id: string,
 		@Body() updateUserDto: UpdateUserRequestDto,
-	): UserResponseDto {
+	): Promise<UserResponseDto> {
 		return this.userService.update(Number(id), updateUserDto);
 	}
 }
