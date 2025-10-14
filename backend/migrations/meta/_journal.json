@@ -15,6 +15,13 @@
       "when": 1760357196476,
       "tag": "0001_icy_calypso",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1760457260388,
+      "tag": "0002_glorious_purple_man",
+      "breakpoints": true
     }
   ]
 }

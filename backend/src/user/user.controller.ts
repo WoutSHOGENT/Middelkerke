@@ -16,13 +16,6 @@ import {
 } from './user.dto';
 import { UserService } from './user.service';
 
-export interface User {
-	id: number;
-	name: string;
-	email: string;
-	password: string;
-}
-
 @Controller('users')
 export class UserController {
 	constructor(private readonly userService: UserService) {}

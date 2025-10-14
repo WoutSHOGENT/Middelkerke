@@ -60,8 +60,8 @@ export class UserService {
 		if (email !== undefined) changes.email = email;
 		if (password !== undefined) changes.password = password;
 
-		const existingUser = this.getById(id);
 		await this.db.update(users).set(changes).where(eq(users.id, id));
+		const existingUser = this.getById(id);
 		return existingUser;
 	}
 }

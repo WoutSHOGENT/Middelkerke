@@ -15,13 +15,14 @@ const db = drizzle(connection, {
 async function resetDatabase() {
 	console.log('🗑️ Resetting database...');
 
+	await db.delete(schema.reservations);
 	await db.delete(schema.users);
 
 	console.log('Database reset completed\n');
 }
 
 async function seedUsers() {
-	console.log('📍 Seeding places...');
+	console.log('Seeding users...');
 
 	await db.insert(schema.users).values([
 		{
@@ -41,11 +42,29 @@ async function seedUsers() {
 	console.log('Users seeded successfully\n');
 }
 
+async function seedReservations() {
+	await db.insert(schema.reservations).values([
+		{
+			id: 1,
+			startDate: new Date('2025-10-12'),
+			endDate: new Date('2025-10-14'),
+			userId: 1,
+		},
+		{
+			id: 2,
+			startDate: new Date('2025-10-17'),
+			endDate: new Date('2025-10-20'),
+			userId: 2,
+		},
+	]);
+}
+
 async function main() {
 	console.log('Starting database seeding...\n');
 
 	await resetDatabase();
 	await seedUsers();
+	await seedReservations();
 
 	console.log('🎉 Database seeding completed successfully!');
 }
