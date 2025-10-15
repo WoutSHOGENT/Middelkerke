@@ -9,7 +9,6 @@ export default function Days({ listOfDays = [], today, selectedDays = [], onDayC
                     date.getFullYear() === today.getFullYear();
                 const dateString = date.toLocaleDateString();
                 const isSelected = selectedDays.includes(dateString);
-
                 return (
                     <li
                         key={index}

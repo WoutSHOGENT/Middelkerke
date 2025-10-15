@@ -2,7 +2,8 @@
 import Header from "./Header";
 import Days from "./Days";
 import { useState, useMemo } from "react";
-import mockdata from "../../../../api/mockdata.json";
+import useSWR from "swr";
+import * as api from "../../../../api/index";
 
 const months = [
     "Januari", "Februari", "Maart", "April", "Mei",
@@ -10,6 +11,15 @@ const months = [
     "November", "December"
 ];
 const weekdays = ["Ma", "Di", "Wo", "Do", "Vr", "Za", "Zo"];
+
+ function toDateOnly(dateTime) {
+        if (!dateTime) return null;
+        const d = dateTime instanceof Date ? dateTime : new Date(dateTime);
+        const y = d.getFullYear();
+        const m = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        return `${day}/${m}/${y}`; 
+    };
 
 function getDayList(year, month) {
     const dayList = [];
@@ -50,11 +60,15 @@ export default function Calender() {
     const [month, setMonth] = useState(now.getMonth());
     const [year, setYear] = useState(now.getFullYear());
     const [selectedDays, setSelectedDays] = useState([]);
-    const [reservedDays, setReservedDays] = useState(mockdata.reservations.flatMap(reservation => reservation.dates));
-    console.log(reservedDays)
-
+    const { data: reservations, isLoading, error: reservationError } = useSWR("reservation", () => api.getAll("reservation"));
+    
+    
     const dayList = useMemo(() => getDayList(year, month), [year, month]);
-
+    
+    if (isLoading) return <div>Loading...</div>;
+    if (reservationError) console.error(reservationError);
+    
+    
     const handleDayClick = (date) => {
         const dateString = date.toLocaleDateString();
         setSelectedDays(prev =>
@@ -64,17 +78,17 @@ export default function Calender() {
         );
     };
 
-    const handleReserve = () => {
-        const alreadyReserved = selectedDays.filter(day => reservedDays.includes(day));
-        if (alreadyReserved.length > 0) {
-            alert("These days have already been reserved: " + alreadyReserved.join(", "));
-            setSelectedDays([]);
-            return;
-        }
-        setReservedDays(prev => [...prev, ...selectedDays]);
-        alert("Reserved days: " + selectedDays.join(", "));
-        setSelectedDays([]);
-    };
+    // const handleReserve = () => {
+    //     const alreadyReserved = selectedDays.filter(day => reservedDays.includes(day));
+    //     if (alreadyReserved.length > 0) {
+    //         alert("These days have already been reserved: " + alreadyReserved.join(", "));
+    //         setSelectedDays([]);
+    //         return;
+    //     }
+    //     setReservedDays(prev => [...prev, ...selectedDays]);
+    //     alert("Reserved days: " + selectedDays.join(", "));
+    //     setSelectedDays([]);
+    // };
 
     return (
         <div className="flex flex-col items-center justify-center w-2/5 h-auto p-4 border-2 border-black">
@@ -96,11 +110,11 @@ export default function Calender() {
                     today={now}
                     selectedDays={selectedDays}
                     onDayClick={handleDayClick}
-                    reservedDays={reservedDays}
+                    reservedDays={reservations.flatMap((reservation) => toDateOnly(reservation.startDate))}
                 />
                 <button
                     className="mt-4 px-4 py-2 bg-red-600 text-white rounded disabled:opacity-50"
-                    onClick={handleReserve}
+                    // onClick={handleReserve}
                     disabled={selectedDays.length === 0}
                 >
                     Reserve Selected Days
